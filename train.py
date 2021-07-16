@@ -4,7 +4,6 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D
 from tensorflow.keras.layers import Activation, Dropout, Flatten, Dense
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.utils import to_categorical
-from sklearn.metrics import confusion_matrix
 import numpy as np
 import os
 import matplotlib.pyplot as plt
@@ -13,7 +12,7 @@ import datetime
 
 classes = ["clear", "rain"]
 num_classes = len(classes)
-image_size = 64
+image_size = 256
 
 """
 データを読み込む関数
@@ -64,43 +63,42 @@ def train(X, y, X_test, y_test):
     # https://keras.io/ja/models/sequential/
     model.compile(loss='categorical_crossentropy',optimizer=opt,metrics=['accuracy'])
 
-    predict_classes = model.predict_classes(X_test)
-    true_classes = y_test
-    print(confusion_matrix(true_classes, predict_classes))
 
-    batch_num = 1024
-    epoch_num = 85
+    batch_num = 512
+    epoch_num = 10
     print("batch:"+str(batch_num))
     print("epoch:"+str(epoch_num))
     history = model.fit(X, y, batch_size=batch_num, epochs=epoch_num, validation_split = 0.1)
     
      # Evaluate the model on the test data using `evaluate`
     print("Evaluate on test data")
-    results = model.evaluate(X_test, y_test, batch_size=256)
+    results = model.evaluate(X_test, y_test, batch_size=128)
     print("test loss, test acc:", results)
 
-    # Plot training & validation accuracy values
-    plt.plot(history.history['accuracy'])
-    plt.plot(history.history['val_accuracy'])
-    plt.title('Model accuracy')
-    plt.ylabel('Accuracy')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Val'], loc='upper left')
-    plt.savefig(os.path.join("./acc_fig/",str(datetime.datetime.today())+"acc.jpg"))
-    plt.clf()
+    # # Plot training & validation accuracy values
+    # plt.plot(history.history['accuracy'])
+    # plt.plot(history.history['val_accuracy'])
+    # plt.title('Model accuracy')
+    # plt.ylabel('Accuracy')
+    # plt.xlabel('Epoch')
+    # plt.legend(['Train', 'Val'], loc='upper left')
+    # plt.savefig(os.path.join("./acc_fig/",str(datetime.datetime.today())+"acc.jpg"))
+    # plt.clf()
 
-    # Plot training & validation loss values
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.title('Model loss')
-    plt.ylabel('Loss')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Val'], loc='upper left')
-    plt.savefig(os.path.join("./loss_fig/",str(datetime.datetime.today())+"loss.jpg"))
+    # # Plot training & validation loss values
+    # plt.plot(history.history['loss'])
+    # plt.plot(history.history['val_loss'])
+    # plt.title('Model loss')
+    # plt.ylabel('Loss')
+    # plt.xlabel('Epoch')
+    # plt.legend(['Train', 'Val'], loc='upper left')
+    # plt.savefig(os.path.join("./loss_fig/",str(datetime.datetime.today())+"loss.jpg"))
     
     # HDF5ファイルにKerasのモデルを保存
     model.save('./cnn.h5')
-
+    
+    model.summary()
+    
     return model
 
 """

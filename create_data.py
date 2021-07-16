@@ -9,7 +9,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 classes = ["clear", "rain"] #0:clear 1:rain
 num_classes = len(classes)
-image_size = 64
+image_size = 256
 num_testdata = 30
 
 X_train = []
