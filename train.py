@@ -18,7 +18,7 @@ image_size = 256
 データを読み込む関数
 """
 def load_data():
-    X_train, X_test, y_train, y_test = np.load("./clear_rain.npy", allow_pickle=True)
+    X_train, X_test, y_train, y_test = np.load("./dataset/clear_rain_" + str(image_size) + ".npy", allow_pickle=True)
     # 入力データの各画素値を0-1の範囲で正規化(学習コストを下げるため)
     X_train = X_train.astype("float") / 255
     X_test  = X_test.astype("float") / 255
@@ -65,7 +65,7 @@ def train(X, y, X_test, y_test):
 
 
     batch_num = 512
-    epoch_num = 10
+    epoch_num = 20
     print("batch:"+str(batch_num))
     print("epoch:"+str(epoch_num))
     history = model.fit(X, y, batch_size=batch_num, epochs=epoch_num, validation_split = 0.1)
@@ -95,9 +95,7 @@ def train(X, y, X_test, y_test):
     # plt.savefig(os.path.join("./loss_fig/",str(datetime.datetime.today())+"loss.jpg"))
     
     # HDF5ファイルにKerasのモデルを保存
-    model.save('./cnn.h5')
-    
-    model.summary()
+    model.save('./model/cnn_imsize'+ str(image_size) +'.h5')
     
     return model
 
