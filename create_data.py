@@ -9,8 +9,8 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 classes = ["clear", "rain"] #0:clear 1:rain
 num_classes = len(classes)
-image_size = 64
-num_testdata = 30
+image_size = 256
+
 
 X_train = []
 X_test  = []
@@ -54,8 +54,8 @@ for index, classlabel in enumerate(classes):
                 X_train.append(data)
                 y_train.append(index)
         
-print(y_train.count(0))
-print(y_train.count(1))
+print("晴れの数:"+str(y_train.count(0)))
+print("雨の数:"+str(y_train.count(1)))
 #validation_splitで均等にとるためにtrainをシャッフル
 shuffl_num = np.random.randint(0, 100)
 np.random.seed(shuffl_num)
@@ -63,7 +63,6 @@ np.random.shuffle(X_train)
 np.random.seed(shuffl_num)
 np.random.shuffle(y_train)
 
-print(y_train)
 # #テストデータの確保 20%
 X_train = X_train[:int(len(X_train) * 0.8)]
 y_train = y_train[:int(len(y_train) * 0.8)]
@@ -71,9 +70,12 @@ y_train = y_train[:int(len(y_train) * 0.8)]
 X_test = X_train[int(len(X_train) * 0.8):]
 y_test = y_train[int(len(y_train) * 0.8):]
 
+print("訓練データ:"+str(len(y_train)))
+print("テストデータ:"+str(len(y_test)))
+
 X_train = np.array(X_train)
 X_test  = np.array(X_test)
 y_train = np.array(y_train)
 y_test  = np.array(y_test)
 xy = (X_train, X_test, y_train, y_test)
-np.save("./clear_rain.npy", xy)
+np.save("./dataset/clear_rain_"+str(image_size)+".npy", xy)
